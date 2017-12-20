@@ -25,6 +25,7 @@ private WebView mWebview;
 private WebView mWebviewPop;
 private FrameLayout mContainer;
 private Toast mToast;
+//private Bundle savedWebviewInstanceState;
 
 
     @Override
@@ -46,10 +47,12 @@ private Toast mToast;
         webSettings.setSupportMultipleWindows(true);
         mWebview.setWebViewClient(new UriWebViewClient());
         mWebview.setWebChromeClient(new UriChromeClient());
+        mWebview.getSettings().setSavePassword(true);
 
         mWebviewPop.setWebViewClient(new UriWebViewClient());
+        mWebviewPop.setWebChromeClient(new UriChromeClient());
         mWebviewPop.getSettings().setJavaScriptEnabled(true);
-        mWebviewPop.getSettings().setSavePassword(false);
+        mWebviewPop.getSettings().setSavePassword(true);
 
 
         //mWebview.loadUrl(target_url);
@@ -118,6 +121,8 @@ private Toast mToast;
 
             //mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             //mContainer.addView(mWebviewPop);
+            //mWebviewPop.saveState(savedWebviewInstanceState);
+
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
             transport.setWebView(mWebviewPop);
             resultMsg.sendToTarget();
@@ -128,6 +133,9 @@ private Toast mToast;
         @Override
         public void onCloseWindow(WebView window) {
             Log.d("onCloseWindow", "called");
+            Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
+            //mWebviewPop.restoreState(savedWebviewInstanceState);
+
         }
 
     }
