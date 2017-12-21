@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -182,7 +181,7 @@ private Bundle savedWebviewInstanceState;
 
 
 
-            CookieSyncManager.createInstance(mContext);
+
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.setAcceptCookie(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -213,6 +212,7 @@ private Bundle savedWebviewInstanceState;
 
             try {
                 builder.dismiss();
+
             } catch (Exception e) {
 
             }
