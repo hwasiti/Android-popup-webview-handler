@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -25,7 +26,7 @@ private Context mContext;
 private Button mBtnGoogle;
 private WebView mWebview;
 
-private WebView mWebviewPopTwo;
+private WebView mWebviewPop;
 private AlertDialog builder;
 private Toast mToast;
 
@@ -132,15 +133,15 @@ private Toast mToast;
         @Override
         public boolean onCreateWindow(WebView view, boolean isDialog,
                                       boolean isUserGesture, Message resultMsg) {
-            mWebviewPopTwo = new WebView(mContext);
-            mWebviewPopTwo.setVerticalScrollBarEnabled(false);
-            mWebviewPopTwo.setHorizontalScrollBarEnabled(false);
-            mWebviewPopTwo.setWebViewClient(new UriWebViewClient());
-            mWebviewPopTwo.setWebChromeClient(new UriChromeClient());
-            mWebviewPopTwo.getSettings().setJavaScriptEnabled(true);
-            mWebviewPopTwo.getSettings().setSavePassword(true);
-            mWebviewPopTwo.getSettings().setSaveFormData(true);
-            //mWebviewPopTwo.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            mWebviewPop = new WebView(mContext);
+            mWebviewPop.setVerticalScrollBarEnabled(false);
+            mWebviewPop.setHorizontalScrollBarEnabled(false);
+            mWebviewPop.setWebViewClient(new UriWebViewClient());
+            mWebviewPop.setWebChromeClient(new UriChromeClient());
+            mWebviewPop.getSettings().setJavaScriptEnabled(true);
+            mWebviewPop.getSettings().setSavePassword(true);
+            mWebviewPop.getSettings().setSaveFormData(true);
+            //mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             // create an AlertDialog.Builder
             //the below did not give me .dismiss() method . See : https://stackoverflow.com/questions/14853325/how-to-dismiss-alertdialog-in-android
@@ -154,16 +155,16 @@ private Toast mToast;
 
             // set the WebView as the AlertDialog.Builder’s view
 
-            builder = new AlertDialog.Builder(MainActivity.this).create();
+            builder = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
 
 
             builder.setTitle("");
-            builder.setView(mWebviewPopTwo);
+            builder.setView(mWebviewPop);
 
             builder.setButton("Close", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    mWebviewPopTwo.destroy();
+                    mWebviewPop.destroy();
                     dialog.dismiss();
 
 
@@ -173,7 +174,7 @@ private Toast mToast;
 
 
             builder.show();
-
+            builder.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
 
 
@@ -181,13 +182,13 @@ private Toast mToast;
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.setAcceptCookie(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                cookieManager.setAcceptThirdPartyCookies(mWebviewPopTwo,true);
+                cookieManager.setAcceptThirdPartyCookies(mWebviewPop,true);
             }
 
 
 
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-            transport.setWebView(mWebviewPopTwo);
+            transport.setWebView(mWebviewPop);
             resultMsg.sendToTarget();
 
             return true;
@@ -201,7 +202,7 @@ private Toast mToast;
 
 
             try {
-                mWebviewPopTwo.destroy();
+                mWebviewPop.destroy();
             } catch (Exception e) {
 
             }
