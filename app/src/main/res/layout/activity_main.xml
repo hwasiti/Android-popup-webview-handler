@@ -6,46 +6,43 @@
     android:layout_height="match_parent"
     tools:context="com.example.haider.myapplication.MainActivity">
 
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="368dp"
-        android:layout_height="308dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/webview_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0099cc"
+        tools:context=".MyActivity">
 
-    <WebView
-        android:id="@+id/webviewPop"
-        android:layout_width="368dp"
-        android:layout_height="123dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
-
+    </FrameLayout>
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/webview"
+        android:layout_centerHorizontal="true"
         android:clickable="true"
         android:onClick="onBtnClick"
-        android:text="Google"
-        app:layout_constraintBottom_toTopOf="@+id/webviewPop"
+        android:text="Google" />
+
+
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:background="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webview" />
+        app:layout_constraintTop_toTopOf="@+id/button"
+        app:layout_constraintVertical_bias="0.49"
+        tools:layout_constraintBottom_toTopOf="parent">
+
+    </WebView>
+
 
 </android.support.constraint.ConstraintLayout>

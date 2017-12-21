@@ -1,12 +1,15 @@
 package com.example.haider.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -22,10 +25,12 @@ public class MainActivity extends AppCompatActivity {
 private Context mContext;
 private Button mBtnGoogle;
 private WebView mWebview;
-private WebView mWebviewPop;
+
+private WebView mWebviewPopTwo;
 private FrameLayout mContainer;
 private Toast mToast;
-//private Bundle savedWebviewInstanceState;
+private long mLastBackPressTime = 0;
+private Bundle savedWebviewInstanceState;
 
 
     @Override
@@ -38,8 +43,7 @@ private Toast mToast;
         cookieManager.setAcceptCookie(true);
         mBtnGoogle = (Button) findViewById(R.id.button);
         mWebview = (WebView) findViewById(R.id.webview);
-        mWebviewPop = (WebView) findViewById(R.id.webviewPop);
-        //mContainer = (FrameLayout) findViewById(R.id.webview_frame);
+        mContainer = (FrameLayout) findViewById(R.id.webview_frame);
         WebSettings webSettings = mWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(true);
@@ -49,10 +53,9 @@ private Toast mToast;
         mWebview.setWebChromeClient(new UriChromeClient());
         mWebview.getSettings().setSavePassword(true);
 
-        mWebviewPop.setWebViewClient(new UriWebViewClient());
-        mWebviewPop.setWebChromeClient(new UriChromeClient());
-        mWebviewPop.getSettings().setJavaScriptEnabled(true);
-        mWebviewPop.getSettings().setSavePassword(true);
+
+
+
 
 
         //mWebview.loadUrl(target_url);
@@ -60,7 +63,10 @@ private Toast mToast;
         mContext=this.getApplicationContext();
 
 
+
     }
+
+
 
     public void onBtnClick(View view) {
 
@@ -102,6 +108,8 @@ private Toast mToast;
 
         */
 
+
+
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                        SslError error) {
@@ -115,16 +123,20 @@ private Toast mToast;
         @Override
         public boolean onCreateWindow(WebView view, boolean isDialog,
                                       boolean isUserGesture, Message resultMsg) {
-            //mWebviewPop = new WebView(mContext);
-            //mWebviewPop.setVerticalScrollBarEnabled(false);
-            //mWebviewPop.setHorizontalScrollBarEnabled(false);
-
-            //mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            //mContainer.addView(mWebviewPop);
-            //mWebviewPop.saveState(savedWebviewInstanceState);
+            mWebviewPopTwo = new WebView(mContext);
+            mWebviewPopTwo.setVerticalScrollBarEnabled(false);
+            mWebviewPopTwo.setHorizontalScrollBarEnabled(false);
+            mWebviewPopTwo.setWebViewClient(new UriWebViewClient());
+            mWebviewPopTwo.setWebChromeClient(new UriChromeClient());
+            mWebviewPopTwo.getSettings().setJavaScriptEnabled(true);
+            mWebviewPopTwo.getSettings().setSavePassword(false);
+            mWebviewPopTwo.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            mWebview.setVisibility(View.GONE);
+            mBtnGoogle.setVisibility(View.GONE);
+            mContainer.addView(mWebviewPopTwo);
 
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-            transport.setWebView(mWebviewPop);
+            transport.setWebView(mWebviewPopTwo);
             resultMsg.sendToTarget();
 
             return true;
@@ -132,10 +144,13 @@ private Toast mToast;
 
         @Override
         public void onCloseWindow(WebView window) {
-            Log.d("onCloseWindow", "called");
-            Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
-            //mWebviewPop.restoreState(savedWebviewInstanceState);
 
+            Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
+            mWebviewPopTwo.destroy();
+            mBtnGoogle.setVisibility(View.VISIBLE);
+            mWebview.setVisibility(View.VISIBLE);
+
+            Log.d("onCloseWindow", "called");
         }
 
     }
