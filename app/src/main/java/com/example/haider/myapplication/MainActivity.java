@@ -1,9 +1,11 @@
 package com.example.haider.myapplication;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -27,6 +30,7 @@ private Button mBtnGoogle;
 private WebView mWebview;
 
 private WebView mWebviewPopTwo;
+private AlertDialog builder;
 private FrameLayout mContainer;
 private Toast mToast;
 private long mLastBackPressTime = 0;
@@ -39,8 +43,7 @@ private Bundle savedWebviewInstanceState;
         setContentView(R.layout.activity_main);
 
 
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(true);
+
         mBtnGoogle = (Button) findViewById(R.id.button);
         mWebview = (WebView) findViewById(R.id.webview);
         mContainer = (FrameLayout) findViewById(R.id.webview_frame);
@@ -49,10 +52,23 @@ private Bundle savedWebviewInstanceState;
         webSettings.setAppCacheEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setSupportMultipleWindows(true);
+        webSettings.setJavaScriptEnabled(true);
+        //webSettings.setAllowContentAccess(true);
+        //webSettings.setAllowFileAccess(true);
+        //webSettings.setDatabaseEnabled(true);
+
+        mWebview.getSettings().setSavePassword(true);
+        mWebview.getSettings().setSaveFormData(true);
         mWebview.setWebViewClient(new UriWebViewClient());
         mWebview.setWebChromeClient(new UriChromeClient());
         mWebview.getSettings().setSavePassword(true);
 
+
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.setAcceptThirdPartyCookies(mWebview,true);
+        }
 
 
 
@@ -129,11 +145,54 @@ private Bundle savedWebviewInstanceState;
             mWebviewPopTwo.setWebViewClient(new UriWebViewClient());
             mWebviewPopTwo.setWebChromeClient(new UriChromeClient());
             mWebviewPopTwo.getSettings().setJavaScriptEnabled(true);
-            mWebviewPopTwo.getSettings().setSavePassword(false);
-            mWebviewPopTwo.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            mWebview.setVisibility(View.GONE);
-            mBtnGoogle.setVisibility(View.GONE);
-            mContainer.addView(mWebviewPopTwo);
+            mWebviewPopTwo.getSettings().setSavePassword(true);
+            mWebviewPopTwo.getSettings().setSaveFormData(true);
+            //mWebviewPopTwo.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+            // create an AlertDialog.Builder
+
+//            AlertDialog.Builder builder;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+//            } else {
+//                builder = new AlertDialog.Builder(MainActivity.this);
+//            }
+
+            // set the WebView as the AlertDialog.Builder’s view
+
+            builder = new AlertDialog.Builder(MainActivity.this).create();
+
+
+            builder.setTitle("");
+            builder.setView(mWebviewPopTwo);
+            //builder.setNeutralButton("OK", null);
+            builder.setButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    mWebviewPopTwo.destroy();
+                    dialog.dismiss();
+
+
+                }
+            });
+
+
+
+            builder.show();
+
+
+
+
+            CookieSyncManager.createInstance(mContext);
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptCookie(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                cookieManager.setAcceptThirdPartyCookies(mWebviewPopTwo,true);
+            }
+
+            //mWebview.setVisibility(View.GONE);
+            //mBtnGoogle.setVisibility(View.GONE);
+            //mContainer.addView(mWebviewPopTwo);
 
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
             transport.setWebView(mWebviewPopTwo);
@@ -142,15 +201,27 @@ private Bundle savedWebviewInstanceState;
             return true;
         }
 
+
         @Override
         public void onCloseWindow(WebView window) {
 
             Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
-            mWebviewPopTwo.destroy();
-            mBtnGoogle.setVisibility(View.VISIBLE);
-            mWebview.setVisibility(View.VISIBLE);
 
-            Log.d("onCloseWindow", "called");
+
+            try {
+                mWebviewPopTwo.destroy();
+            } catch (Exception e) {
+
+            }
+
+            builder.dismiss();
+
+            //mBtnGoogle.setVisibility(View.VISIBLE);
+            //mWebview.setVisibility(View.VISIBLE);
+
+
+
+
         }
 
     }
