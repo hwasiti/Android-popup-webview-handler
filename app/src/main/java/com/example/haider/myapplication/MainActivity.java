@@ -1,7 +1,6 @@
 package com.example.haider.myapplication;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.http.SslError;
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
@@ -46,7 +44,7 @@ private Bundle savedWebviewInstanceState;
 
         mBtnGoogle = (Button) findViewById(R.id.button);
         mWebview = (WebView) findViewById(R.id.webview);
-        mContainer = (FrameLayout) findViewById(R.id.webview_frame);
+
         WebSettings webSettings = mWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(true);
@@ -150,6 +148,7 @@ private Bundle savedWebviewInstanceState;
             //mWebviewPopTwo.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             // create an AlertDialog.Builder
+            //the below did not give me .dismiss() method . See : https://stackoverflow.com/questions/14853325/how-to-dismiss-alertdialog-in-android
 
 //            AlertDialog.Builder builder;
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -165,7 +164,7 @@ private Bundle savedWebviewInstanceState;
 
             builder.setTitle("");
             builder.setView(mWebviewPopTwo);
-            //builder.setNeutralButton("OK", null);
+
             builder.setButton("Close", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
@@ -190,9 +189,7 @@ private Bundle savedWebviewInstanceState;
                 cookieManager.setAcceptThirdPartyCookies(mWebviewPopTwo,true);
             }
 
-            //mWebview.setVisibility(View.GONE);
-            //mBtnGoogle.setVisibility(View.GONE);
-            //mContainer.addView(mWebviewPopTwo);
+
 
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
             transport.setWebView(mWebviewPopTwo);
@@ -205,7 +202,7 @@ private Bundle savedWebviewInstanceState;
         @Override
         public void onCloseWindow(WebView window) {
 
-            Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
 
 
             try {
@@ -214,12 +211,11 @@ private Bundle savedWebviewInstanceState;
 
             }
 
-            builder.dismiss();
+            try {
+                builder.dismiss();
+            } catch (Exception e) {
 
-            //mBtnGoogle.setVisibility(View.VISIBLE);
-            //mWebview.setVisibility(View.VISIBLE);
-
-
+            }
 
 
         }
