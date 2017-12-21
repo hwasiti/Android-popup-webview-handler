@@ -17,7 +17,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +27,6 @@ private WebView mWebview;
 
 private WebView mWebviewPopTwo;
 private AlertDialog builder;
-private FrameLayout mContainer;
 private Toast mToast;
 private long mLastBackPressTime = 0;
 private Bundle savedWebviewInstanceState;
