@@ -28,8 +28,6 @@ private WebView mWebview;
 private WebView mWebviewPopTwo;
 private AlertDialog builder;
 private Toast mToast;
-private long mLastBackPressTime = 0;
-private Bundle savedWebviewInstanceState;
 
 
     @Override
