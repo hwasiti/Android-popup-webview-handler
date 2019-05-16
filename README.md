@@ -1,4 +1,4 @@
-# Android_Popup_Webview_handler_example
+# Android popup webview handler
 This is an Android Studio project showing how to handle popups in Android Webview. 
 Most open Source browsers do not support opening popups.
 
