@@ -21,26 +21,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
 private Context mContext;
 private Button mBtnGoogle;
 private WebView mWebview;
-
 private WebView mWebviewPop;
 private AlertDialog builder;
 private Toast mToast;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
         mBtnGoogle = (Button) findViewById(R.id.button);
         mWebview = (WebView) findViewById(R.id.webview);
-
         WebSettings webSettings = mWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(true);
@@ -50,43 +43,30 @@ private Toast mToast;
         //webSettings.setAllowContentAccess(true);
         //webSettings.setAllowFileAccess(true);
         //webSettings.setDatabaseEnabled(true);
-
         mWebview.getSettings().setSavePassword(true);
         mWebview.getSettings().setSaveFormData(true);
         mWebview.setWebViewClient(new UriWebViewClient());
         mWebview.setWebChromeClient(new UriChromeClient());
         mWebview.getSettings().setSavePassword(true);
-
-
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(mWebview,true);
         }
-
-
-
-
-
+        
         //mWebview.loadUrl(target_url);
-
         mContext=this.getApplicationContext();
-
-
-
     }
 
-
-
     public void onBtnClick(View view) {
-
         // Go to Google
         mWebview.loadUrl("http://www.google.com");
     }
 
 
     private class UriWebViewClient extends WebViewClient {
-
+        
         /*
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -117,8 +97,6 @@ private Toast mToast;
         }
 
         */
-
-
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler,
@@ -156,28 +134,18 @@ private Toast mToast;
             // set the WebView as the AlertDialog.Builder’s view
 
             builder = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-
-
             builder.setTitle("");
             builder.setView(mWebviewPop);
-
             builder.setButton("Close", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     mWebviewPop.destroy();
                     dialog.dismiss();
-
-
                 }
             });
 
-
-
             builder.show();
             builder.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-
-
-
 
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.setAcceptCookie(true);
@@ -185,39 +153,28 @@ private Toast mToast;
                 cookieManager.setAcceptThirdPartyCookies(mWebviewPop,true);
             }
 
-
-
             WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
             transport.setWebView(mWebviewPop);
             resultMsg.sendToTarget();
-
             return true;
         }
 
-
+        
         @Override
         public void onCloseWindow(WebView window) {
-
             //Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
-
-
             try {
                 mWebviewPop.destroy();
             } catch (Exception e) {
-
+                // TODO: Write an exception handler to notify user
             }
 
             try {
                 builder.dismiss();
 
             } catch (Exception e) {
-
+                // TODO: Write an exception handler to notify user
             }
-
-
         }
-
     }
-
-
 }
