@@ -1,5 +1,4 @@
 package com.example.haider.myapplication;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,9 +63,7 @@ private Toast mToast;
         mWebview.loadUrl("http://www.google.com");
     }
 
-
     private class UriWebViewClient extends WebViewClient {
-        
         /*
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -119,18 +116,18 @@ private Toast mToast;
             mWebviewPop.getSettings().setJavaScriptEnabled(true);
             mWebviewPop.getSettings().setSavePassword(true);
             mWebviewPop.getSettings().setSaveFormData(true);
-            //mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            // mWebviewPop.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             // create an AlertDialog.Builder
-            //the below did not give me .dismiss() method . See : https://stackoverflow.com/questions/14853325/how-to-dismiss-alertdialog-in-android
+            // the below did not give me .dismiss() method . See : https://stackoverflow.com/questions/14853325/how-to-dismiss-alertdialog-in-android
 
-//            AlertDialog.Builder builder;
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
-//            } else {
-//                builder = new AlertDialog.Builder(MainActivity.this);
-//            }
-
+            // AlertDialog.Builder builder;
+            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //     builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            // } else {
+            //     builder = new AlertDialog.Builder(MainActivity.this);
+            // }
+            
             // set the WebView as the AlertDialog.Builder’s view
 
             builder = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
@@ -159,7 +156,6 @@ private Toast mToast;
             return true;
         }
 
-        
         @Override
         public void onCloseWindow(WebView window) {
             //Toast.makeText(mContext,"onCloseWindow called",Toast.LENGTH_SHORT).show();
@@ -171,7 +167,6 @@ private Toast mToast;
 
             try {
                 builder.dismiss();
-
             } catch (Exception e) {
                 // TODO: Write an exception handler to notify user
             }
